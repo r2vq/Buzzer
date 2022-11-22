@@ -4,6 +4,7 @@ import NameBox from './NameBox.js';
 import { useState } from "react";
 import { initializeApp } from "firebase/app";
 import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import uuid from "react-uuid";
 
 function App() {
 
@@ -20,6 +21,12 @@ function App() {
 
   const db = getFirestore(app);
 
+  let userId = localStorage.getItem("uuid")
+  if (!userId) {
+    localStorage.setItem("uuid", uuid());
+    userId = localStorage.getItem("uuid");
+  }
+
   return (
     <div className="App">
       <header className="App-header">
@@ -32,6 +39,7 @@ function App() {
         <BuzzerButton
           db={db}
           userName={userName}
+          userId={userId}
         ></BuzzerButton>
         <a
           className="App-link"
@@ -46,15 +54,14 @@ function App() {
   );
 }
 
-function BuzzerButton({ db, userName }) {
+function BuzzerButton({ db, userName, userId }) {
 
   async function buzz() {
     try {
-      const docRef = await addDoc(collection(db, "buzzes"), {
+      await addDoc(collection(db, "buzzes"), {
         userName: userName,
-        born: 1815
+        userId: userId
       });
-      console.log("Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
     }
