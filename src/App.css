@@ -4,7 +4,6 @@
 
 .App-logo {
   height: 40vmin;
-  pointer-events: none;
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -14,14 +13,21 @@
 }
 
 .App-header {
+  background-color: #000000;
+  color: #ffffff;
+  display: flex;
+  min-height: 10vh;
+}
+
+.App-main {
+  align-items: center;
   background-color: #282c34;
-  min-height: 100vh;
+  color: white;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  justify-content: center;
   font-size: calc(10px + 2vmin);
-  color: white;
+  justify-content: center;
+  min-height: 90vh;
 }
 
 .App-link {
@@ -32,6 +38,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }

@@ -1,0 +1,27 @@
+.NameBox-input {
+    height: 80%;
+    margin: 2px;
+    text-align: center;
+    width: 80%;
+}
+
+.NameBox-name:not(.empty) {
+    font-size: xx-large;
+    font-weight: bolder;
+}
+
+.NameBox-saveButton {
+    background-color: #99ff99;
+    border: 0;
+    border-radius: 4px;
+    height: 80%;
+    margin: 2px;
+}
+
+.NameBox-wrapper {
+    display: flex;
+    align-items: center;
+    flex-direction: row;
+    justify-content: center;
+    width: 100vw;
+}
