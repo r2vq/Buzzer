@@ -30,6 +30,7 @@ function NameBox({ userName, setUserName }) {
     return (
       <div className="NameBox-wrapper">
         <input
+          autoFocus
           className="NameBox-input"
           onChange={(e) => setUserName(e.target.value)}
           ref={inputRef}
