@@ -1,6 +1,6 @@
 import './App.css';
-import BuzzerButton from './BuzzerButton';
-import NameBox from './NameBox.js';
+import BuzzerButton from '../BuzzerButton/BuzzerButton';
+import NameBox from '../NameBox/NameBox.js';
 import { useState } from "react";
 import uuid from "react-uuid";
 

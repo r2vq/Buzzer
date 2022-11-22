@@ -1,7 +1,7 @@
-import logo from './logo.svg';
+import logo from '../img/logo.svg';
 import { addDoc, collection, getFirestore, serverTimestamp } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
-import audio from "./audio/buzzer.wav";
+import audio from "../audio/buzzer.wav";
 
 function BuzzerButton({ userName, userId, isEnabled }) {
 
