@@ -15,24 +15,20 @@ function BuzzerButton({ userName, userId, isEnabled }) {
 
     const db = getFirestore(app);
 
-    async function buzz() {
-        try {
-            await addDoc(collection(db, "buzzes"), {
-                userName: userName,
-                userId: userId,
-                ts: serverTimestamp()
-            });
-        } catch (e) {
-            console.error("Error adding document: ", e);
+    async function imageClick(event) {
+        if (isEnabled) {
+            try {
+                await addDoc(collection(db, "buzzes"), {
+                    userName: userName,
+                    userId: userId,
+                    ts: serverTimestamp()
+                });
+                console.log("done");
+            } catch (e) {
+                console.error("Error adding document: ", e);
+            }
         }
     }
-
-    const imageClick = event => {
-        if (isEnabled) {
-            buzz()
-                .then(() => { console.log("done"); });
-        }
-    };
 
     return (
         <img
