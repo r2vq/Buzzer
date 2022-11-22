@@ -1,6 +1,7 @@
 import logo from './logo.svg';
 import { addDoc, collection, getFirestore, serverTimestamp } from 'firebase/firestore';
 import { initializeApp } from "firebase/app";
+import audio from "./audio/buzzer.wav";
 
 function BuzzerButton({ userName, userId, isEnabled }) {
 
@@ -18,6 +19,7 @@ function BuzzerButton({ userName, userId, isEnabled }) {
     async function imageClick(event) {
         if (isEnabled) {
             try {
+                new Audio(audio).play();
                 await addDoc(collection(db, "buzzes"), {
                     userName: userName,
                     userId: userId,
