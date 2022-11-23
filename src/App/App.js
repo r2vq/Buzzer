@@ -1,44 +1,47 @@
 import './App.css';
-import BuzzerButton from '../BuzzerButton/BuzzerButton';
-import NameBox from '../NameBox/NameBox.js';
+import Room from '../Room/Room'
 import { useState } from "react";
 import uuid from "react-uuid";
+import { initializeApp } from "firebase/app";
+import { getFirestore } from 'firebase/firestore';
+import RoomList from '../RoomList/RoomList';
 
 function App() {
-
-  const [userName, setUserName] = useState('');
-
   let userId = localStorage.getItem("uuid")
   if (!userId) {
     localStorage.setItem("uuid", uuid());
     userId = localStorage.getItem("uuid");
   }
+  const [roomId, setRoomId] = useState('');
 
-  return (
-    <div className="App">
-      <header className="App-header">
-        <NameBox
-          userName={userName}
-          setUserName={setUserName}
-        ></NameBox>
-      </header>
-      <main className="App-main">
-        <BuzzerButton
-          userName={userName}
-          userId={userId}
-          isEnabled={userName.trim() !== ""}
-        ></BuzzerButton>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </main>
-    </div>
-  );
+  const app = initializeApp({
+    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
+    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
+    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
+    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
+    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
+    appId: process.env.REACT_APP_FIREBASE_APP_ID
+  });
+
+  const db = getFirestore(app);
+
+  if (roomId) {
+    return (
+      <Room
+        db={db}
+        roomId={roomId}
+        userId={userId}
+      ></Room>
+    );
+  } else {
+    return (
+      <RoomList
+        db={db}
+        userId={userId}
+        setRoomId={setRoomId}
+      ></RoomList>
+    )
+  }
 }
 
 export default App;
