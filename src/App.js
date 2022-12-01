@@ -85,6 +85,7 @@ function App() {
     room = <AdminScreen
       db={db}
       roomId={roomId}
+      onDeleteRoom={onExitClick}
     />
   } else {
     room = <ButtonScreen
