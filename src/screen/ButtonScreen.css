@@ -1,0 +1,11 @@
+.ButtonScreen-roomName {
+    text-align: center;
+}
+
+.ButtonScreen-wrapper {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    height: 100vh;
+    justify-content: space-between;
+}
