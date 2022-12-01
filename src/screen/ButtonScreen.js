@@ -1,23 +1,44 @@
 import BuzzerButton from "../view/BuzzerButton";
-import { addDoc, collection, getDocs, query, serverTimestamp, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
 import "./ButtonScreen.css"
 import { useEffect, useState } from "react";
 import Header from "../view/Header";
 
 function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName, userId }) {
 
-    const [roomName, setRoomName] = useState("");
+    const [roomInfo, setRoomInfo] = useState({
+        name: "",
+        docId: ""
+    });
 
     useEffect(() => {
         const fetchData = async function () {
             const q = query(collection(db, "rooms"), where("roomId", "==", roomId))
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
-                setRoomName(doc.data().roomName);
+                setRoomInfo({
+                    name: doc.data().roomName,
+                    docId: doc.id
+                });
             });
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        let unsub;
+        const subscribeForUpdates = async function (docId) {
+            unsub = onSnapshot(doc(db, "rooms", docId), (doc) => {
+                if (!doc.data()) {
+                    onExitClick();
+                }
+            });
+        };
+        if (roomInfo.docId) {
+            subscribeForUpdates(roomInfo.docId);
+        }
+        return () => { unsub && unsub() };
+    }, [roomInfo]);
 
     const onButtonClick = async () => {
         try {
@@ -36,7 +57,7 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
         className="ButtonScreen-wrapper"
     >
         <Header
-            title={roomName}
+            title={roomInfo.name}
             name={userName}
             onExit={onExitClick}
             onNameClear={onNameClear}
