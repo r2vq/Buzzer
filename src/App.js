@@ -45,8 +45,12 @@ function App() {
   };
 
   const onNameChanged = (name) => {
-    setUserName(name)
+    setUserName(name);
   };
+
+  const onNameClear = () => {
+    setUserName("");
+  }
 
   const onRoomCreated = async (name) => {
     await addDoc(collection(db, "rooms"), {
@@ -86,6 +90,7 @@ function App() {
     room = <ButtonScreen
       db={db}
       onExitClick={onExitClick}
+      onNameClear={onNameClear}
       roomId={roomId}
       setError={setError}
       userName={userName}

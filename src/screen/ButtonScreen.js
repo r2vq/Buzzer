@@ -4,7 +4,7 @@ import "./ButtonScreen.css"
 import { useEffect, useState } from "react";
 import Header from "../view/Header";
 
-function ButtonScreen({ db, onExitClick, roomId, setError, userName, userId }) {
+function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName, userId }) {
 
     const [roomName, setRoomName] = useState("");
 
@@ -39,6 +39,7 @@ function ButtonScreen({ db, onExitClick, roomId, setError, userName, userId }) {
             title={roomName}
             name={userName}
             onExit={onExitClick}
+            onNameClear={onNameClear}
         />
         <BuzzerButton
             isEnabled={true}
