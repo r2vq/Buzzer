@@ -12,7 +12,7 @@ function RoomListScreen({ db, userId, setRoomId }) {
                 let foundMatch = false;
                 const rooms = [];
                 docs.forEach(doc => {
-                    if (doc.data.roomId === userId) {
+                    if (doc.data().roomId === userId) {
                         foundMatch = true;
                     }
                     rooms.push({
