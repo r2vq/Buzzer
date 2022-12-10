@@ -1,7 +1,14 @@
 .ExitButton-button {
-    background-color: #990000;
     color: #ffffff;
     font-weight: bolder;
     padding: 20px;
     text-transform: uppercase;
+}
+
+.ExitButton-delete {
+    background-color: #990000;
+}
+
+.ExitButton-exit {
+    background-color: #000000;
 }

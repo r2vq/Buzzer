@@ -57,6 +57,7 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
         className="ButtonScreen-wrapper"
     >
         <Header
+            isAdmin={false}
             title={roomInfo.name}
             name={userName}
             onExit={onExitClick}

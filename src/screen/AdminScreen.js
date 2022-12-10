@@ -34,6 +34,7 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
 
     return <div>
         <Header
+            isAdmin={true}
             title={roomName}
             name="Admin"
             onExit={onExit}

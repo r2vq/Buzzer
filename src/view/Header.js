@@ -1,7 +1,7 @@
 import ExitButton from "./ExitButton";
 import "./Header.css";
 
-function Header({ name, onExit, onNameClear, title }) {
+function Header({ isAdmin, name, onExit, onNameClear, title }) {
     return <div
         className="Header-wrapper"
     >
@@ -21,6 +21,7 @@ function Header({ name, onExit, onNameClear, title }) {
             </div>
         </div>
         <ExitButton
+            isDelete={isAdmin}
             onClick={onExit}
         />
     </div>;
