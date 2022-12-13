@@ -1,5 +1,6 @@
 import { collection, deleteDoc, doc, getDocs, query, onSnapshot, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
+import BuzzList from "../view/BuzzList";
 import Header from "../view/Header";
 import "./AdminScreen.css";
 
@@ -18,7 +19,7 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
             });
         };
         fetchData();
-    }, []);
+    }, [db, roomId]);
 
     useEffect(() => {
         const unsub = onSnapshot(collection(db, "buzzes"), (buzz) => {
@@ -37,7 +38,8 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
         return () => {
             unsub();
         };
-    }, []);
+    }, [db, roomId]);
+
     const onExit = async function () {
         const deleteRoom = async function () {
             deleteDoc(doc(db, "rooms", roomDocId.current));
@@ -63,15 +65,6 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
         clearRoom();
     };
 
-    const buzzDivs = buzzes.map((buzz) => <div className="adminScreen-buzz" key={buzz.id}>
-        <div>
-            {buzz.userName}
-        </div>
-        <div>
-            {buzz.ts}
-        </div>
-    </div>);
-
     return <div
         className="adminScreen-wrapper">
         <Header
@@ -93,10 +86,9 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
                     Clear
                 </button>
             </div>
-            <div
-                className="adminScreen-buzzes">
-                {buzzDivs}
-            </div>
+            <BuzzList
+                buzzes={buzzes}
+            />
         </div>
     </div>;
 }

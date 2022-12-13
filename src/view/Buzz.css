@@ -1,0 +1,15 @@
+.buzz-buzz {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.buzz-buzz:nth-child(1) {
+    background-color: greenyellow;
+}
+
+.buzz-buzz:nth-child(even) {
+    background-color: #eeeeee;
+}

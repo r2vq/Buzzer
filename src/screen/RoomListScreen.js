@@ -1,6 +1,6 @@
 import "./RoomListScreen.css"
 import { useEffect, useState } from "react";
-import { collection, getDocs, onSnapshot } from 'firebase/firestore';
+import { collection, onSnapshot } from 'firebase/firestore';
 import RoomListItem from "../view/RoomListItem";
 
 function RoomListScreen({ db, userId, setRoomId }) {
@@ -10,7 +10,6 @@ function RoomListScreen({ db, userId, setRoomId }) {
         const unsub = onSnapshot(collection(db, "rooms"), (docs) => {
             let foundMatch = false;
             const rooms = [];
-            console.log(docs);
             docs.forEach(doc => {
                 if (doc.data().roomId === userId) {
                     foundMatch = true;
@@ -31,7 +30,7 @@ function RoomListScreen({ db, userId, setRoomId }) {
         return () => {
             unsub();
         };
-    }, []);
+    }, [db, setRoomId, userId]);
 
     let mappedRooms = [
         {
