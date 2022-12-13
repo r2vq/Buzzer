@@ -9,7 +9,7 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
 
     useEffect(() => {
         const fetchData = async function () {
-            const q = query(collection(db, "rooms"), where("roomId", "==", roomId))
+            const q = query(collection(db, "rooms"), where("roomId", "==", roomId));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 roomDocId.current = doc.id;
@@ -32,7 +32,19 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
         // no-op
     };
 
-    return <div>
+    const onClear = async function () {
+        const clearRoom = async function () {
+            const q = query(collection(db, "buzzes"), where("roomId", "==", roomId));
+            const querySnapshot = await getDocs(q);
+            querySnapshot.forEach((buzz) => {
+                deleteDoc(doc(db, "buzzes", buzz.id));
+            });
+        };
+        clearRoom();
+    };
+
+    return <div
+        className="adminScreen-wrapper">
         <Header
             isAdmin={true}
             title={roomName}
@@ -40,6 +52,19 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
             onExit={onExit}
             onNameClear={onNameChange}
         />
+        <div
+            className="adminScreen-content">
+            <button
+                className="adminScreen-button"
+                onClick={onClear}
+            >
+                Clear
+            </button>
+            <div
+                className="">
+
+            </div>
+        </div>
     </div>;
 }
 

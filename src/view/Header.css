@@ -20,5 +20,5 @@
     box-shadow: 0 1px 4px -1px;
     display: flex;
     flex-direction: row;
-    justify-content: end;
+    justify-content: flex-end;
 }
