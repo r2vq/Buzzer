@@ -1,4 +1,4 @@
-import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, onSnapshot, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import Header from "../view/Header";
 import "./AdminScreen.css";
@@ -21,22 +21,23 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
     }, []);
 
     useEffect(() => {
-        getDocs(collection(db, "buzzes"))
-            .then(buzzesDocs => {
-                const mappedBuzzes = [];
-                buzzesDocs.forEach(buzzesDoc => {
-                    const data = buzzesDoc.data();
-                    mappedBuzzes.push({
-                        "id": buzzesDoc.id,
-                        "userName": data.userName,
-                        "ts": data.ts.nt
-                    });
+        const unsub = onSnapshot(collection(db, "buzzes"), (buzz) => {
+            const mappedBuzzes = [];
+            buzz.docs.forEach((buzzesDoc) => {
+                const data = buzzesDoc.data();
+                mappedBuzzes.push({
+                    "id": buzzesDoc.id,
+                    "userName": data.userName,
+                    "ts": data.ts.seconds
                 });
-                return mappedBuzzes;
-            })
-            .then(mappedBuzzes => setBuzzes(mappedBuzzes));
-    }, []);
+            });
+            setBuzzes(mappedBuzzes);
+        });
 
+        return () => {
+            unsub();
+        };
+    }, []);
     const onExit = async function () {
         const deleteRoom = async function () {
             deleteDoc(doc(db, "rooms", roomDocId.current));
