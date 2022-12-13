@@ -1,15 +1,17 @@
+import audio from "../audio/buzzer.wav";
 import BuzzerButton from "../view/BuzzerButton";
 import { addDoc, collection, doc, getDocs, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
 import "./ButtonScreen.css"
 import { useEffect, useState } from "react";
 import Header from "../view/Header";
+import BuzzList from "../view/BuzzList";
 
 function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName, userId }) {
-
     const [roomInfo, setRoomInfo] = useState({
         name: "",
         docId: ""
     });
+    const [buzzes, setBuzzes] = useState([]);
 
     useEffect(() => {
         const fetchData = async function () {
@@ -24,6 +26,25 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
         };
         fetchData();
     }, []);
+
+    useEffect(() => {
+        const unsub = onSnapshot(collection(db, "buzzes"), (buzz) => {
+            const mappedBuzzes = [];
+            buzz.docs.forEach((buzzesDoc) => {
+                const data = buzzesDoc.data();
+                mappedBuzzes.push({
+                    "id": buzzesDoc.id,
+                    "userName": data.userName,
+                    "ts": data.ts.seconds
+                });
+            });
+            setBuzzes(mappedBuzzes);
+        });
+
+        return () => {
+            unsub();
+        };
+    }, [db, roomId]);
 
     useEffect(() => {
         let unsub;
@@ -41,6 +62,7 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
     }, [roomInfo]);
 
     const onButtonClick = async () => {
+        new Audio(audio).play();
         try {
             await addDoc(collection(db, "buzzes"), {
                 roomId: roomId,
@@ -54,20 +76,23 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
     };
 
     return <div
-        className="ButtonScreen-wrapper"
-    >
+        className="buzzerScreen-wrapper">
         <Header
             isAdmin={false}
             title={roomInfo.name}
             name={userName}
             onExit={onExitClick}
-            onNameClear={onNameClear}
-        />
-        <BuzzerButton
-            isEnabled={true}
-            onClick={onButtonClick}
-        />
-        <div />
+            onNameClear={onNameClear} />
+        <div
+            className="buzzerScreen-content">
+            <BuzzerButton
+                enabledText="Buzz in!"
+                disabledText="Disabled"
+                isEnabled={true}
+                onClick={onButtonClick} />
+            <BuzzList
+                buzzes={buzzes} />
+        </div>
     </div>;
 }
 

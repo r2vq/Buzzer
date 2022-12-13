@@ -1,0 +1,29 @@
+.buzzerButton-button {
+    border-radius: 40vw;
+    font-size: 30px;
+    height: 80vw;
+    width: 80vw;
+    text-transform: uppercase;
+}
+
+.buzzerButton-button.enabled {
+    background-color: #3060c0;
+}
+
+.buzzerButton-button.disabled {
+    background-color: #efefef;
+    color: #999999;
+}
+
+.buzzerButton-buttonWrapper {
+    align-items: center;
+    display: flex;
+    justify-content: center;
+    padding: 20px;
+}
+
+.buzzerScreen-wrapper {
+    display: flex;
+    flex-direction: column;
+    height: 100vh;
+}

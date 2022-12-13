@@ -1,5 +1,6 @@
 import { collection, deleteDoc, doc, getDocs, query, onSnapshot, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
+import BuzzerButton from "../view/BuzzerButton";
 import BuzzList from "../view/BuzzList";
 import Header from "../view/Header";
 import "./AdminScreen.css";
@@ -72,23 +73,16 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
             title={roomName}
             name="Admin"
             onExit={onExit}
-            onNameClear={onNameChange}
-        />
+            onNameClear={onNameChange} />
         <div
             className="adminScreen-content">
-            <div
-                className="adminScreen-buttonWrapper"
-            >
-                <button
-                    className="adminScreen-button"
-                    onClick={onClear}
-                >
-                    Clear
-                </button>
-            </div>
+            <BuzzerButton
+                enabledText="CLEAR"
+                disabledText="DISABLED"
+                isEnabled={true}
+                onClick={onClear} />
             <BuzzList
-                buzzes={buzzes}
-            />
+                buzzes={buzzes} />
         </div>
     </div>;
 }

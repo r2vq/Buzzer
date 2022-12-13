@@ -1,11 +1,13 @@
-.ButtonScreen-roomName {
-    text-align: center;
-}
-
-.ButtonScreen-wrapper {
+.buzzerScreen-content {
     display: flex;
     flex-direction: column;
-    gap: 20px;
+    height: 100%;
+    justify-items: flex-start;
+}
+
+.buzzerScreen-wrapper {
+    display: flex;
+    flex-direction: column;
     height: 100vh;
-    justify-content: space-between;
+    justify-content: flex-start;
 }

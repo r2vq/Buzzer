@@ -1,22 +1,24 @@
-import logo from '../img/logo.svg';
-import audio from "../audio/buzzer.wav";
+import "./BuzzerButton.css"
 
-function BuzzerButton({ db, userName, userId, isEnabled, onClick }) {
+function BuzzerButton({ enabledText, disabledText, isEnabled, onClick }) {
 
     async function buttonClick(event) {
         if (isEnabled) {
-            new Audio(audio).play();
             onClick();
         }
     }
 
     return (
-        <img
-            src={logo}
-            className="App-logo"
-            alt="logo"
-            onClick={buttonClick}
-        />
+        <div
+            className="buzzerButton-buttonWrapper"
+        >
+            <button
+                className={"buzzerButton-button" + (isEnabled ? " enabled" : " disabled")}
+                onClick={buttonClick}
+            >
+                {isEnabled ? enabledText : disabledText}
+            </button>
+        </div>
     );
 }
 
