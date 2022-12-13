@@ -6,9 +6,40 @@
     text-transform: uppercase;
 }
 
+.adminScreen-buttonWrapper {
+    display: flex;
+    flex-grow: 1;
+    align-items: center;
+}
+
+.adminScreen-buzz {
+    display: flex;
+    gap: 40px;
+    justify-content: center;
+    padding: 20px;
+    width: 100%;
+}
+
+.adminScreen-buzz:nth-child(1) {
+    background-color: greenyellow;
+}
+
+.adminScreen-buzz:nth-child(even) {
+    background-color: #eeeeee;
+}
+
+.adminScreen-buzzes {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    width: 100%;
+}
+
 .adminScreen-content {
     align-items: center;
     display: flex;
+    flex-direction: column;
     flex-grow: 1;
     justify-content: center;
 }

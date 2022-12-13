@@ -5,6 +5,7 @@ import "./AdminScreen.css";
 
 function AdminScreen({ db, roomId, onDeleteRoom }) {
     const [roomName, setRoomName] = useState("");
+    const [buzzes, setBuzzes] = useState([]);
     const roomDocId = useRef("");
 
     useEffect(() => {
@@ -17,6 +18,23 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
             });
         };
         fetchData();
+    }, []);
+
+    useEffect(() => {
+        getDocs(collection(db, "buzzes"))
+            .then(buzzesDocs => {
+                const mappedBuzzes = [];
+                buzzesDocs.forEach(buzzesDoc => {
+                    const data = buzzesDoc.data();
+                    mappedBuzzes.push({
+                        "id": buzzesDoc.id,
+                        "userName": data.userName,
+                        "ts": data.ts.nt
+                    });
+                });
+                return mappedBuzzes;
+            })
+            .then(mappedBuzzes => setBuzzes(mappedBuzzes));
     }, []);
 
     const onExit = async function () {
@@ -39,9 +57,19 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
             querySnapshot.forEach((buzz) => {
                 deleteDoc(doc(db, "buzzes", buzz.id));
             });
+            setBuzzes([]);
         };
         clearRoom();
     };
+
+    const buzzDivs = buzzes.map((buzz) => <div className="adminScreen-buzz" key={buzz.id}>
+        <div>
+            {buzz.userName}
+        </div>
+        <div>
+            {buzz.ts}
+        </div>
+    </div>);
 
     return <div
         className="adminScreen-wrapper">
@@ -54,15 +82,19 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
         />
         <div
             className="adminScreen-content">
-            <button
-                className="adminScreen-button"
-                onClick={onClear}
-            >
-                Clear
-            </button>
             <div
-                className="">
-
+                className="adminScreen-buttonWrapper"
+            >
+                <button
+                    className="adminScreen-button"
+                    onClick={onClear}
+                >
+                    Clear
+                </button>
+            </div>
+            <div
+                className="adminScreen-buzzes">
+                {buzzDivs}
             </div>
         </div>
     </div>;
