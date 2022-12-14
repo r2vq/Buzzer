@@ -11,15 +11,14 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
     const roomDocId = useRef("");
 
     useEffect(() => {
-        const fetchData = async function () {
+        (async function () {
             const q = query(collection(db, "rooms"), where("roomId", "==", roomId));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 roomDocId.current = doc.id;
                 setRoomName(doc.data().roomName);
             });
-        };
-        fetchData();
+        })();
     }, [db, roomId]);
 
     useEffect(() => {
@@ -48,11 +47,11 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
     }, [db, roomId]);
 
     const onExit = async function () {
-        const deleteRoom = async function () {
+        (async function () {
+            await onClear();
             deleteDoc(doc(db, "rooms", roomDocId.current));
             roomDocId.current = "";
-        };
-        deleteRoom();
+        })();
         onDeleteRoom();
     };
 
@@ -61,15 +60,14 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
     };
 
     const onClear = async function () {
-        const clearRoom = async function () {
+        (async function () {
             const q = query(collection(db, "buzzes"), where("roomId", "==", roomId));
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((buzz) => {
                 deleteDoc(doc(db, "buzzes", buzz.id));
             });
             setBuzzes([]);
-        };
-        clearRoom();
+        })();
     };
 
     return <div

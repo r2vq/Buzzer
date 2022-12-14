@@ -15,7 +15,7 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
     const [isEnabled, setEnabled] = useState(true);
 
     useEffect(() => {
-        const fetchData = async function () {
+        (async function () {
             const q = query(collection(db, "rooms"), where("roomId", "==", roomId))
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
@@ -24,9 +24,8 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
                     docId: doc.id
                 });
             });
-        };
-        fetchData();
-    }, []);
+        })();
+    }, [db, roomId]);
 
     useEffect(() => {
         const buzzDoc = collection(db, "buzzes");
@@ -60,18 +59,17 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
 
     useEffect(() => {
         let unsub;
-        const subscribeForUpdates = async function (docId) {
-            unsub = onSnapshot(doc(db, "rooms", docId), (doc) => {
-                if (!doc.data()) {
-                    onExitClick();
-                }
-            });
-        };
         if (roomInfo.docId) {
-            subscribeForUpdates(roomInfo.docId);
+            (async function (docId) {
+                unsub = onSnapshot(doc(db, "rooms", docId), (doc) => {
+                    if (!doc.data()) {
+                        onExitClick();
+                    }
+                });
+            })(roomInfo.docId);
         }
         return () => { unsub && unsub() };
-    }, [roomInfo]);
+    }, [db, onExitClick, roomInfo]);
 
     const onButtonClick = async () => {
         new Audio(audio).play();
