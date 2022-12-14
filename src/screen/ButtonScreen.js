@@ -12,6 +12,7 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
         docId: ""
     });
     const [buzzes, setBuzzes] = useState([]);
+    const [isEnabled, setEnabled] = useState(true);
 
     useEffect(() => {
         const fetchData = async function () {
@@ -34,15 +35,20 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
         const buzzQuery = query(buzzDoc, whereClause, order);
         const queryCallback = (buzz) => {
             const mappedBuzzes = [];
+            let shouldBeEnabled = true;
             buzz.docs.forEach((buzzesDoc) => {
                 const data = buzzesDoc.data();
-                const ts = new Date(data.ts.toMillis()).toLocaleString();
+                const ts = data.ts ? new Date(data.ts.toMillis()).toLocaleString() : "";
                 mappedBuzzes.push({
                     "id": buzzesDoc.id,
                     "userName": data.userName,
                     "ts": ts
                 });
+                if (data.userId === userId) {
+                    shouldBeEnabled = false;
+                }
             });
+            setEnabled(shouldBeEnabled);
             setBuzzes(mappedBuzzes);
         };
         const unsub = onSnapshot(buzzQuery, queryCallback);
@@ -50,7 +56,7 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
         return () => {
             unsub();
         };
-    }, [db, roomId]);
+    }, [db, roomId, userId]);
 
     useEffect(() => {
         let unsub;
@@ -94,7 +100,7 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
             <BuzzerButton
                 enabledText="Buzz in!"
                 disabledText="Disabled"
-                isEnabled={true}
+                isEnabled={isEnabled}
                 onClick={onButtonClick} />
             <BuzzList
                 buzzes={buzzes} />

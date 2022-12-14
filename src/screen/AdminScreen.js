@@ -31,7 +31,7 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
             const mappedBuzzes = [];
             buzz.docs.forEach((buzzesDoc) => {
                 const data = buzzesDoc.data();
-                const ts = new Date(data.ts.toMillis()).toLocaleString();
+                const ts = data.ts ? new Date(data.ts.toMillis()).toLocaleString() : "";
                 mappedBuzzes.push({
                     "id": buzzesDoc.id,
                     "userName": data.userName,
