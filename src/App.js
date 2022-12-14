@@ -1,7 +1,7 @@
 import './App.css';
 import { useState } from "react";
 import { initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore, serverTimestamp } from 'firebase/firestore';
+import { addDoc, collection, getFirestore } from 'firebase/firestore';
 import uuid from "react-uuid";
 
 import EditScreen from './screen/EditScreen';
@@ -9,6 +9,7 @@ import RoomListScreen from './screen/RoomListScreen';
 import AdminScreen from './screen/AdminScreen';
 import ButtonScreen from './screen/ButtonScreen';
 import ErrorScreen from './screen/ErrorScreen';
+import BuzzListScreen from './screen/BuzzListScreen';
 
 function App() {
   const [userName, setNameState] = useState(() =>
@@ -82,19 +83,33 @@ function App() {
       onSubmit={onRoomCreated}
     />
   } else if (roomId === userId) {
-    room = <AdminScreen
+    room = <BuzzListScreen
       db={db}
+      render={({ buzzes, setBuzzes }) => <AdminScreen
+        buzzes={buzzes}
+        db={db}
+        onDeleteRoom={onExitClick}
+        roomId={roomId}
+        setBuzzes={setBuzzes}
+      />}
       roomId={roomId}
-      onDeleteRoom={onExitClick}
+      userId={userId}
     />
   } else {
-    room = <ButtonScreen
+    room = <BuzzListScreen
       db={db}
-      onExitClick={onExitClick}
-      onNameClear={onNameClear}
+      render={({ buzzes, isEnabled }) => <ButtonScreen
+        buzzes={buzzes}
+        db={db}
+        isEnabled={isEnabled}
+        onExitClick={onExitClick}
+        onNameClear={onNameClear}
+        roomId={roomId}
+        setError={setError}
+        userName={userName}
+        userId={userId}
+      />}
       roomId={roomId}
-      setError={setError}
-      userName={userName}
       userId={userId}
     />
   }

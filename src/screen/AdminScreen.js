@@ -1,13 +1,12 @@
-import { collection, deleteDoc, doc, getDocs, query, onSnapshot, where, orderBy } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import BuzzerButton from "../view/BuzzerButton";
 import BuzzList from "../view/BuzzList";
 import Header from "../view/Header";
 import "./AdminScreen.css";
 
-function AdminScreen({ db, roomId, onDeleteRoom }) {
+function AdminScreen({ buzzes, db, onDeleteRoom, roomId, setBuzzes }) {
     const [roomName, setRoomName] = useState("");
-    const [buzzes, setBuzzes] = useState([]);
     const roomDocId = useRef("");
 
     useEffect(() => {
@@ -21,31 +20,6 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
         })();
     }, [db, roomId]);
 
-    useEffect(() => {
-        const buzzDoc = collection(db, "buzzes");
-        const whereClause = where("roomId", "==", roomId);
-        const order = orderBy("ts");
-        const buzzQuery = query(buzzDoc, whereClause, order);
-        const queryCallback = (buzz) => {
-            const mappedBuzzes = [];
-            buzz.docs.forEach((buzzesDoc) => {
-                const data = buzzesDoc.data();
-                const ts = data.ts ? new Date(data.ts.toMillis()).toLocaleString() : "";
-                mappedBuzzes.push({
-                    "id": buzzesDoc.id,
-                    "userName": data.userName,
-                    "ts": ts
-                });
-            });
-            setBuzzes(mappedBuzzes);
-        };
-        const unsub = onSnapshot(buzzQuery, queryCallback);
-
-        return () => {
-            unsub();
-        };
-    }, [db, roomId]);
-
     const onExit = async function () {
         (async function () {
             await onClear();
@@ -53,10 +27,6 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
             roomDocId.current = "";
         })();
         onDeleteRoom();
-    };
-
-    const onNameChange = async function () {
-        // no-op
     };
 
     const onClear = async function () {
@@ -76,8 +46,7 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
             isAdmin={true}
             title={roomName}
             name="Admin"
-            onExit={onExit}
-            onNameClear={onNameChange} />
+            onExit={onExit} />
         <div
             className="adminScreen-content">
             <BuzzerButton

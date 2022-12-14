@@ -15,7 +15,7 @@ function Header({ isAdmin, name, onExit, onNameClear, title }) {
             </div>
             <div
                 className="Header-name"
-                onClick={() => onNameClear()}
+                onClick={() => onNameClear && onNameClear()}
             >
                 {name}
             </div>

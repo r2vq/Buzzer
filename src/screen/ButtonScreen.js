@@ -1,18 +1,16 @@
 import audio from "../audio/buzzer.wav";
 import BuzzerButton from "../view/BuzzerButton";
-import { addDoc, collection, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
 import "./ButtonScreen.css"
 import { useEffect, useState } from "react";
 import Header from "../view/Header";
 import BuzzList from "../view/BuzzList";
 
-function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName, userId }) {
+function ButtonScreen({ buzzes, db, isEnabled, onExitClick, onNameClear, roomId, setError, userName, userId }) {
     const [roomInfo, setRoomInfo] = useState({
         name: "",
         docId: ""
     });
-    const [buzzes, setBuzzes] = useState([]);
-    const [isEnabled, setEnabled] = useState(true);
 
     useEffect(() => {
         (async function () {
@@ -26,36 +24,6 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
             });
         })();
     }, [db, roomId]);
-
-    useEffect(() => {
-        const buzzDoc = collection(db, "buzzes");
-        const whereClause = where("roomId", "==", roomId);
-        const order = orderBy("ts");
-        const buzzQuery = query(buzzDoc, whereClause, order);
-        const queryCallback = (buzz) => {
-            const mappedBuzzes = [];
-            let shouldBeEnabled = true;
-            buzz.docs.forEach((buzzesDoc) => {
-                const data = buzzesDoc.data();
-                const ts = data.ts ? new Date(data.ts.toMillis()).toLocaleString() : "";
-                mappedBuzzes.push({
-                    "id": buzzesDoc.id,
-                    "userName": data.userName,
-                    "ts": ts
-                });
-                if (data.userId === userId) {
-                    shouldBeEnabled = false;
-                }
-            });
-            setEnabled(shouldBeEnabled);
-            setBuzzes(mappedBuzzes);
-        };
-        const unsub = onSnapshot(buzzQuery, queryCallback);
-
-        return () => {
-            unsub();
-        };
-    }, [db, roomId, userId]);
 
     useEffect(() => {
         let unsub;
