@@ -1,7 +1,6 @@
 import './App.css';
 import { useState } from "react";
 import { addDoc, collection } from 'firebase/firestore';
-import uuid from "react-uuid";
 
 import EditScreen from './screen/EditScreen';
 import RoomListScreen from './screen/RoomListScreen';
@@ -10,6 +9,7 @@ import ButtonScreen from './screen/ButtonScreen';
 import ErrorScreen from './screen/ErrorScreen';
 import BuzzListScreen from './screen/BuzzListScreen';
 import firestoreDb from './firebase-config';
+import uuid from 'react-uuid';
 
 function App() {
   const [userName, setNameState] = useState(() =>
@@ -19,14 +19,7 @@ function App() {
     localStorage.setItem("name", name);
     setNameState(name);
   };
-  const [userId] = useState(() => {
-    let id = localStorage.getItem("uuid");
-    if (!id) {
-      id = uuid();
-      localStorage.setItem("uuid", id);
-    }
-    return id;
-  });
+  let userId = localStorage.getItem("uuid") || (localStorage.setItem("uuid", uuid()) && localStorage.getItem("uuid"));
   const [roomId, setRoomId] = useState("");
   const [error, setError] = useState("");
 
