@@ -16,7 +16,7 @@ function BuzzerButton({ enabledText, disabledText, isEnabled, onClick }) {
                 className={"buzzerButton-button" + (isEnabled ? " enabled" : " disabled")}
                 onClick={buttonClick}
             >
-                {isEnabled ? enabledText : disabledText}
+                {isEnabled ? enabledText : (disabledText || "")}
             </button>
         </div>
     );

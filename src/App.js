@@ -1,7 +1,6 @@
 import './App.css';
 import { useState } from "react";
-import { initializeApp } from "firebase/app";
-import { addDoc, collection, getFirestore } from 'firebase/firestore';
+import { addDoc, collection } from 'firebase/firestore';
 import uuid from "react-uuid";
 
 import EditScreen from './screen/EditScreen';
@@ -10,6 +9,7 @@ import AdminScreen from './screen/AdminScreen';
 import ButtonScreen from './screen/ButtonScreen';
 import ErrorScreen from './screen/ErrorScreen';
 import BuzzListScreen from './screen/BuzzListScreen';
+import firestoreDb from './firebase-config';
 
 function App() {
   const [userName, setNameState] = useState(() =>
@@ -30,17 +30,6 @@ function App() {
   const [roomId, setRoomId] = useState("");
   const [error, setError] = useState("");
 
-  const app = initializeApp({
-    apiKey: process.env.REACT_APP_FIREBASE_API_KEY,
-    authDomain: process.env.REACT_APP_FIREBASE_AUTH_DOMAIN,
-    projectId: process.env.REACT_APP_FIREBASE_PROJECT_ID,
-    storageBucket: process.env.REACT_APP_FIREBASE_STORAGE_BUCKET,
-    messagingSenderId: process.env.REACT_APP_FIREBASE_MESSAGING_SENDER_ID,
-    appId: process.env.REACT_APP_FIREBASE_APP_ID
-  });
-
-  const db = getFirestore(app);
-
   const onExitClick = () => {
     setRoomId("");
   };
@@ -54,7 +43,7 @@ function App() {
   }
 
   const onRoomCreated = async (name) => {
-    await addDoc(collection(db, "rooms"), {
+    await addDoc(collection(firestoreDb, "rooms"), {
       roomId: userId,
       roomName: name
     });
@@ -73,7 +62,6 @@ function App() {
     />
   } else if (roomId === "") {
     room = <RoomListScreen
-      db={db}
       userId={userId}
       setRoomId={setRoomId}
     />
@@ -84,10 +72,8 @@ function App() {
     />
   } else if (roomId === userId) {
     room = <BuzzListScreen
-      db={db}
       render={({ buzzes, setBuzzes }) => <AdminScreen
         buzzes={buzzes}
-        db={db}
         onDeleteRoom={onExitClick}
         roomId={roomId}
         setBuzzes={setBuzzes}
@@ -97,10 +83,8 @@ function App() {
     />
   } else {
     room = <BuzzListScreen
-      db={db}
       render={({ buzzes, isEnabled }) => <ButtonScreen
         buzzes={buzzes}
-        db={db}
         isEnabled={isEnabled}
         onExitClick={onExitClick}
         onNameClear={onNameClear}

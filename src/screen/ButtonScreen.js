@@ -5,8 +5,9 @@ import "./ButtonScreen.css"
 import { useEffect, useState } from "react";
 import Header from "../view/Header";
 import BuzzList from "../view/BuzzList";
+import firestoreDb from "../firebase-config";
 
-function ButtonScreen({ buzzes, db, isEnabled, onExitClick, onNameClear, roomId, setError, userName, userId }) {
+function ButtonScreen({ buzzes, isEnabled, onExitClick, onNameClear, roomId, setError, userName, userId }) {
     const [roomInfo, setRoomInfo] = useState({
         name: "",
         docId: ""
@@ -14,7 +15,7 @@ function ButtonScreen({ buzzes, db, isEnabled, onExitClick, onNameClear, roomId,
 
     useEffect(() => {
         (async function () {
-            const q = query(collection(db, "rooms"), where("roomId", "==", roomId))
+            const q = query(collection(firestoreDb, "rooms"), where("roomId", "==", roomId))
             const querySnapshot = await getDocs(q);
             querySnapshot.forEach((doc) => {
                 setRoomInfo({
@@ -23,13 +24,13 @@ function ButtonScreen({ buzzes, db, isEnabled, onExitClick, onNameClear, roomId,
                 });
             });
         })();
-    }, [db, roomId]);
+    }, [roomId]);
 
     useEffect(() => {
         let unsub;
         if (roomInfo.docId) {
             (async function (docId) {
-                unsub = onSnapshot(doc(db, "rooms", docId), (doc) => {
+                unsub = onSnapshot(doc(firestoreDb, "rooms", docId), (doc) => {
                     if (!doc.data()) {
                         onExitClick();
                     }
@@ -37,12 +38,12 @@ function ButtonScreen({ buzzes, db, isEnabled, onExitClick, onNameClear, roomId,
             })(roomInfo.docId);
         }
         return () => { unsub && unsub() };
-    }, [db, onExitClick, roomInfo]);
+    }, [onExitClick, roomInfo]);
 
     const onButtonClick = async () => {
         new Audio(audio).play();
         try {
-            await addDoc(collection(db, "buzzes"), {
+            await addDoc(collection(firestoreDb, "buzzes"), {
                 roomId: roomId,
                 ts: serverTimestamp(),
                 userName: userName,

@@ -2,12 +2,13 @@ import "./RoomListScreen.css"
 import { useEffect, useState } from "react";
 import { collection, onSnapshot } from 'firebase/firestore';
 import RoomListItem from "../view/RoomListItem";
+import firestoreDb from "../firebase-config";
 
-function RoomListScreen({ db, userId, setRoomId }) {
+function RoomListScreen({ userId, setRoomId }) {
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
-        const unsub = onSnapshot(collection(db, "rooms"), (docs) => {
+        const unsub = onSnapshot(collection(firestoreDb, "rooms"), (docs) => {
             let foundMatch = false;
             const rooms = [];
             docs.forEach(doc => {
@@ -30,7 +31,7 @@ function RoomListScreen({ db, userId, setRoomId }) {
         return () => {
             unsub();
         };
-    }, [db, setRoomId, userId]);
+    }, [setRoomId, userId]);
 
     let mappedRooms = [
         {
