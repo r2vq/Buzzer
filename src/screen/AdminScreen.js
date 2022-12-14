@@ -1,4 +1,4 @@
-import { collection, deleteDoc, doc, getDocs, query, onSnapshot, where } from "firebase/firestore";
+import { collection, deleteDoc, doc, getDocs, query, onSnapshot, where, orderBy } from "firebase/firestore";
 import { useEffect, useRef, useState } from "react";
 import BuzzerButton from "../view/BuzzerButton";
 import BuzzList from "../view/BuzzList";
@@ -23,18 +23,24 @@ function AdminScreen({ db, roomId, onDeleteRoom }) {
     }, [db, roomId]);
 
     useEffect(() => {
-        const unsub = onSnapshot(collection(db, "buzzes"), (buzz) => {
+        const buzzDoc = collection(db, "buzzes");
+        const whereClause = where("roomId", "==", roomId);
+        const order = orderBy("ts");
+        const buzzQuery = query(buzzDoc, whereClause, order);
+        const queryCallback = (buzz) => {
             const mappedBuzzes = [];
             buzz.docs.forEach((buzzesDoc) => {
                 const data = buzzesDoc.data();
+                const ts = new Date(data.ts.toMillis()).toLocaleString();
                 mappedBuzzes.push({
                     "id": buzzesDoc.id,
                     "userName": data.userName,
-                    "ts": data.ts.seconds
+                    "ts": ts
                 });
             });
             setBuzzes(mappedBuzzes);
-        });
+        };
+        const unsub = onSnapshot(buzzQuery, queryCallback);
 
         return () => {
             unsub();

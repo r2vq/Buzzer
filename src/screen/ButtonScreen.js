@@ -1,6 +1,6 @@
 import audio from "../audio/buzzer.wav";
 import BuzzerButton from "../view/BuzzerButton";
-import { addDoc, collection, doc, getDocs, onSnapshot, query, serverTimestamp, where } from 'firebase/firestore';
+import { addDoc, collection, doc, getDocs, onSnapshot, orderBy, query, serverTimestamp, where } from 'firebase/firestore';
 import "./ButtonScreen.css"
 import { useEffect, useState } from "react";
 import Header from "../view/Header";
@@ -28,18 +28,24 @@ function ButtonScreen({ db, onExitClick, onNameClear, roomId, setError, userName
     }, []);
 
     useEffect(() => {
-        const unsub = onSnapshot(collection(db, "buzzes"), (buzz) => {
+        const buzzDoc = collection(db, "buzzes");
+        const whereClause = where("roomId", "==", roomId);
+        const order = orderBy("ts");
+        const buzzQuery = query(buzzDoc, whereClause, order);
+        const queryCallback = (buzz) => {
             const mappedBuzzes = [];
             buzz.docs.forEach((buzzesDoc) => {
                 const data = buzzesDoc.data();
+                const ts = new Date(data.ts.toMillis()).toLocaleString();
                 mappedBuzzes.push({
                     "id": buzzesDoc.id,
                     "userName": data.userName,
-                    "ts": data.ts.seconds
+                    "ts": ts
                 });
             });
             setBuzzes(mappedBuzzes);
-        });
+        };
+        const unsub = onSnapshot(buzzQuery, queryCallback);
 
         return () => {
             unsub();
