@@ -61,7 +61,7 @@ function ButtonScreen({ buzzes, isEnabled, onExitClick, onNameClear, roomId, set
             title={roomInfo.name}
             name={userName}
             onExit={onExitClick}
-            onNameClear={onNameClear} />
+            onClick={onNameClear} />
         <div
             className="buzzerScreen-content">
             <BuzzerButton
