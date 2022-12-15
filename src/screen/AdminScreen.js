@@ -24,10 +24,10 @@ function AdminScreen({ buzzes, onDeleteRoom, roomId, setBuzzes }) {
     const onExit = async function () {
         (async function () {
             await onClear();
-            deleteDoc(doc(firestoreDb, "rooms", roomDocId.current));
+            await deleteDoc(doc(firestoreDb, "rooms", roomDocId.current));
             roomDocId.current = "";
+            onDeleteRoom();
         })();
-        onDeleteRoom();
     };
 
     const onClear = async function () {
