@@ -8,18 +8,17 @@ function RoomListScreen({ userId, setRoomId }) {
     const [rooms, setRooms] = useState([]);
 
     useEffect(() => {
-        const unsub = onSnapshot(collection(firestoreDb, "rooms"), (docs) => {
+        const unsub = onSnapshot(collection(firestoreDb, "rooms"), ({ docs }) => {
             let foundMatch = false;
-            const rooms = [];
-            docs.forEach(doc => {
+            const rooms = Array.prototype.map.call(docs, doc => {
                 if (doc.data().roomId === userId) {
                     foundMatch = true;
                 }
-                rooms.push({
+                return {
                     id: doc.data().roomId,
                     name: doc.data().roomName,
                     onClick: id => { setRoomId(id); }
-                });
+                };
             });
             if (foundMatch) {
                 setRoomId(userId);

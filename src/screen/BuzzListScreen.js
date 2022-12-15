@@ -11,21 +11,20 @@ function BuzzListScreen({ render, roomId, userId }) {
         const whereClause = where("roomId", "==", roomId);
         const order = orderBy("ts");
         const buzzQuery = query(buzzDoc, whereClause, order);
-        const queryCallback = (buzz) => {
-            const mappedBuzzes = [];
+        const queryCallback = ({ docs }) => {
             let shouldBeEnabled = true;
-            buzz.docs.forEach((buzzesDoc) => {
+            const mappedBuzzes = Array.prototype.map.call(docs, (buzzesDoc) => {
                 const data = buzzesDoc.data();
                 const userName = userId === data.userId ? `${data.userName} (You)` : data.userName
                 const ts = formatDate(data.ts);
-                mappedBuzzes.push({
-                    "id": buzzesDoc.id,
-                    "userName": userName,
-                    "ts": ts
-                });
                 if (data.userId === userId) {
                     shouldBeEnabled = false;
                 }
+                return {
+                    "id": buzzesDoc.id,
+                    "userName": userName,
+                    "ts": ts
+                };
             });
             setEnabled(shouldBeEnabled);
             setBuzzes(mappedBuzzes);
