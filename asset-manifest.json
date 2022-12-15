@@ -1,14 +1,14 @@
 {
   "files": {
-    "main.css": "/Buzzer/static/css/main.b9289e12.css",
-    "main.js": "/Buzzer/static/js/main.31a59838.js",
+    "main.css": "/Buzzer/static/css/main.13bb788e.css",
+    "main.js": "/Buzzer/static/js/main.727e72e4.js",
     "static/media/buzzer.wav": "/Buzzer/static/media/buzzer.adfbaedb7daa67dc061a.wav",
     "index.html": "/Buzzer/index.html",
-    "main.b9289e12.css.map": "/Buzzer/static/css/main.b9289e12.css.map",
-    "main.31a59838.js.map": "/Buzzer/static/js/main.31a59838.js.map"
+    "main.13bb788e.css.map": "/Buzzer/static/css/main.13bb788e.css.map",
+    "main.727e72e4.js.map": "/Buzzer/static/js/main.727e72e4.js.map"
   },
   "entrypoints": [
-    "static/css/main.b9289e12.css",
-    "static/js/main.31a59838.js"
+    "static/css/main.13bb788e.css",
+    "static/js/main.727e72e4.js"
   ]
 }
