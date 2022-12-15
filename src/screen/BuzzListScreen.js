@@ -16,10 +16,11 @@ function BuzzListScreen({ render, roomId, userId }) {
             let shouldBeEnabled = true;
             buzz.docs.forEach((buzzesDoc) => {
                 const data = buzzesDoc.data();
+                const userName = userId === data.userId ? `${data.userName} (You)` : data.userName
                 const ts = formatDate(data.ts);
                 mappedBuzzes.push({
                     "id": buzzesDoc.id,
-                    "userName": data.userName,
+                    "userName": userName,
                     "ts": ts
                 });
                 if (data.userId === userId) {
