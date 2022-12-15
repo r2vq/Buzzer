@@ -17,8 +17,11 @@
 }
 
 .Header-wrapper {
+    background-color: #060CE9;
     box-shadow: 0 1px 4px -1px;
+    color: #ffffff;
     display: flex;
     flex-direction: row;
     justify-content: flex-end;
+    text-shadow: #000000 2px 2px 2px;
 }

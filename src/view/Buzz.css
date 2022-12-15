@@ -3,13 +3,20 @@
     gap: 40px;
     justify-content: center;
     padding: 20px;
-    width: 100%;
+    user-select: none;
 }
 
 .buzz-buzz:nth-child(1) {
-    background-color: greenyellow;
+    background-color: #060CE9;
+    color: #eeeeee;
+    font-weight: 900;
+    text-shadow: #000000 2px 2px 2px;
 }
 
 .buzz-buzz:nth-child(even) {
     background-color: #eeeeee;
+}
+
+.buzz-buzz:last-child {
+    box-shadow: rgba(0, 0, 0, 0.2) 0px 2px 0px;
 }

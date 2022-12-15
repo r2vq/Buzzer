@@ -1,9 +1,8 @@
 .adminScreen-content {
-    align-items: center;
     display: flex;
     flex-direction: column;
-    flex-grow: 1;
-    justify-content: center;
+    height: 100%;
+    justify-items: flex-start;
 }
 
 .adminScreen-wrapper {

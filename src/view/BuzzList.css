@@ -1,7 +1,6 @@
 .buzzList-buzzes {
-    align-items: center;
+    align-items: stretch;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
-    width: 100%;
 }

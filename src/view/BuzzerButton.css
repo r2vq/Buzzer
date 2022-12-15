@@ -1,22 +1,27 @@
 .buzzerButton-button {
     border-radius: 40vw;
+    box-shadow: #000000 2px 2px 4px;
     font-size: 30px;
+    font-weight: 900;
     height: 80vw;
-    width: 80vw;
     text-transform: uppercase;
+    width: 80vw;
 }
 
 .buzzerButton-button.enabled {
-    background-color: #3060c0;
+    background: #060CE9;
+    background: linear-gradient(145deg, rgba(6,12,233,1) 0%, rgba(9,9,121,1) 100%);
+    color: #ffffff;
 }
 
 .buzzerButton-button.disabled {
-    background-color: #efefef;
+    background-color: #777777;
     color: #999999;
 }
 
 .buzzerButton-buttonWrapper {
     align-items: center;
+    background-color: #ffffff;
     display: flex;
     justify-content: center;
     padding: 20px;

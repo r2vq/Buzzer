@@ -65,8 +65,8 @@ function ButtonScreen({ buzzes, isEnabled, onExitClick, onNameClear, roomId, set
         <div
             className="buzzerScreen-content">
             <BuzzerButton
-                enabledText="Buzz in!"
-                disabledText="Disabled"
+                enabledText=""
+                disabledText="BUZZ!!!"
                 isEnabled={isEnabled}
                 onClick={onButtonClick} />
             <BuzzList
