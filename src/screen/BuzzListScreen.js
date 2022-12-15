@@ -16,7 +16,7 @@ function BuzzListScreen({ render, roomId, userId }) {
             let shouldBeEnabled = true;
             buzz.docs.forEach((buzzesDoc) => {
                 const data = buzzesDoc.data();
-                const ts = data.ts ? new Date(data.ts.toMillis()).toLocaleString() : "";
+                const ts = formatDate(data.ts);
                 mappedBuzzes.push({
                     "id": buzzesDoc.id,
                     "userName": data.userName,
@@ -37,6 +37,20 @@ function BuzzListScreen({ render, roomId, userId }) {
     }, [roomId, userId]);
 
     return render({ buzzes, isEnabled, setBuzzes });
+}
+
+function formatDate(ts) {
+    if (!ts) {
+        return ""
+    }
+
+    const date = new Date(ts.toMillis());
+    const hour = date.getHours();
+    const minute = (date.getMinutes()).toString().padStart(2, "0");
+    const second = (date.getSeconds()).toString().padStart(2, "0");
+    const millisecond = date.getMilliseconds();
+
+    return `${hour}:${minute}:${second}.${millisecond}`;
 }
 
 export default BuzzListScreen;
